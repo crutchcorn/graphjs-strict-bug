@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+const { Gitgraph } = require("@gitgraph/react");
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Gitgraph>
+        {(gitgraph) => {
+          // Simulate git commands with Gitgraph API.
+          const master = gitgraph.branch("master");
+          master.commit("Initial commit");
+
+          const develop = master.branch("develop");
+          develop.commit("Add TypeScript");
+
+          const aFeature = develop.branch("a-feature");
+          aFeature
+              .commit("Make it work")
+              .commit("Make it right")
+              .commit("Make it fast");
+
+          develop.merge(aFeature);
+          develop.commit("Prepare v1");
+
+          master.merge(develop).tag("v1.0.0");
+        }}
+      </Gitgraph>
   );
 }
 
